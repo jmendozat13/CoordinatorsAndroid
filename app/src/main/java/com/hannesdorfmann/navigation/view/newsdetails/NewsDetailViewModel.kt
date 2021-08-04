@@ -1,7 +1,8 @@
 package com.hannesdorfmann.navigation.view.newsdetails
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.hannesdorfmann.navigation.domain.news.NewsRepository
 import io.reactivex.disposables.Disposable
 
@@ -10,7 +11,8 @@ class NewsDetailViewModel(
         private val onCloseNews: () -> Unit
 ) : ViewModel() {
 
-    val title = MutableLiveData<String>()
+    private val mTitle = MutableLiveData<String>()
+    val title: LiveData<String> get() = mTitle
 
     lateinit var disposable: Disposable
 
@@ -18,7 +20,7 @@ class NewsDetailViewModel(
         set(value) {
             field = value
             disposable = newsRepository.getNewsArticle(newsId).subscribe {
-                title.value = it.title
+                mTitle.value = it.title
             }
         }
 

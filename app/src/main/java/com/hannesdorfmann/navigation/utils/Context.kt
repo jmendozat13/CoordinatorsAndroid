@@ -1,14 +1,13 @@
 package com.hannesdorfmann.navigation.utils
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.Fragment
-import com.hannesdorfmann.navigation.AppViewModelFactory
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.hannesdorfmann.navigation.MyApp
 import com.hannesdorfmann.navigation.coordinator.Navigator
 import com.hannesdorfmann.navigation.coordinator.RootFlowCoordinator
+import com.hannesdorfmann.navigation.view.iap.IapViewModel
 
 val Fragment.application
     get() = requireActivity().application as MyApp
@@ -26,5 +25,5 @@ val Activity.rootFlowCoordinator: RootFlowCoordinator
 
 
 inline fun <reified VM : ViewModel> Fragment.getViewModel(): VM {
-    return ViewModelProviders.of(this, application.viewModelFactory!!)[VM::class.java]
+    return ViewModelProvider(this, application.viewModelFactory)[VM::class.java]
 }

@@ -1,42 +1,48 @@
 package com.hannesdorfmann.navigation.view.onboarding.personalinterests
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import com.hannesdorfmann.navigation.R
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.hannesdorfmann.navigation.databinding.FragmentCategoriesBinding
 import com.hannesdorfmann.navigation.utils.getViewModel
-import com.hannesdorfmann.navigation.utils.subscribe
-import kotlinx.android.synthetic.main.fragment_categories.*
 
 class PersonalInterestsFragment : Fragment() {
 
     lateinit var adapter: PersonalInteresstsAdapter
+    private lateinit var bindingCategories: FragmentCategoriesBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_categories, null, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        bindingCategories = FragmentCategoriesBinding.inflate(inflater, container, false)
+        return bindingCategories.root
+    }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val viewModel: PersonalInterestsViewModel = getViewModel()
 
         adapter = PersonalInteresstsAdapter(layoutInflater) {
             viewModel.toggleSelected(it)
         }
 
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-        recyclerView.adapter = adapter
-        nextButton.setOnClickListener { viewModel.nextClicked() }
-        viewModel.allCategories.subscribe(this) {
+        with(bindingCategories) {
+            recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+            recyclerView.adapter = adapter
+            nextButton.setOnClickListener { viewModel.nextClicked() }
+        }
+        viewModel.allCategories.observe(viewLifecycleOwner) {
             adapter.items = it
-            adapter.notifyDataSetChanged()
         }
 
-        viewModel.selectedItems.subscribe(this) {
+        viewModel.selectedItems.observe(viewLifecycleOwner) {
             adapter.selected = it
-            adapter.notifyDataSetChanged()
         }
     }
+
 }

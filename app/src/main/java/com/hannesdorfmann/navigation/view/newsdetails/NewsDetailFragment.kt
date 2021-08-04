@@ -1,21 +1,20 @@
 package com.hannesdorfmann.navigation.view.newsdetails
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.hannesdorfmann.navigation.OnBackPressed
-import com.hannesdorfmann.navigation.R
+import com.hannesdorfmann.navigation.databinding.FragmentDetailBinding
 import com.hannesdorfmann.navigation.utils.getViewModel
-import com.hannesdorfmann.navigation.utils.subscribe
-import kotlinx.android.synthetic.main.fragment_detail.*
-
 
 class NewsDetailFragment : Fragment(), OnBackPressed {
 
+    private lateinit var bindingNewDetail: FragmentDetailBinding
+
     companion object {
-        private val KEY_NEWS_ID = "NewsId"
+        private const val KEY_NEWS_ID = "NewsId"
         fun newInstance(newsId: Int): NewsDetailFragment {
             val b = Bundle()
             b.putInt(KEY_NEWS_ID, newsId)
@@ -29,21 +28,25 @@ class NewsDetailFragment : Fragment(), OnBackPressed {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        newsId = arguments!!.getInt(KEY_NEWS_ID)
+        newsId = requireArguments().getInt(KEY_NEWS_ID)
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_detail, null, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        bindingNewDetail = FragmentDetailBinding.inflate(inflater, container, false)
+        return bindingNewDetail.root
     }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val vm: NewsDetailViewModel = getViewModel()
         vm.newsId = newsId
-        vm.title.subscribe(this) {
-            title.text = it
+        vm.title.observe(viewLifecycleOwner) {
+            bindingNewDetail.title.text = it
         }
     }
 

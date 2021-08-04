@@ -1,9 +1,9 @@
 package com.hannesdorfmann.navigation
 
 import android.app.Application
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.hannesdorfmann.navigation.coordinator.*
 import com.hannesdorfmann.navigation.domain.ab.AbTest
 import com.hannesdorfmann.navigation.domain.news.NewsRepository
@@ -18,7 +18,6 @@ import com.hannesdorfmann.navigation.view.onboarding.welcome.WelcomeViewModel
 
 
 class AppViewModelFactory(application: Application) : ViewModelProvider.Factory {
-
 
     //
     // Don't do this add home!

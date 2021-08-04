@@ -1,26 +1,28 @@
 package com.hannesdorfmann.navigation.view.iap
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.hannesdorfmann.navigation.OnBackPressed
-import com.hannesdorfmann.navigation.R
+import com.hannesdorfmann.navigation.databinding.FragmentPurchaseBinding
 import com.hannesdorfmann.navigation.utils.getViewModel
-import kotlinx.android.synthetic.main.fragment_purchase.*
 
 open class IapNewsFragment : Fragment(), OnBackPressed {
 
     private lateinit var vm: IapViewModel
+    private lateinit var bindingIap: FragmentPurchaseBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_purchase, null, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingIap = FragmentPurchaseBinding.inflate(inflater, container, false)
+        return bindingIap.root
+    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         vm = getViewModel()
-        purchase.setOnClickListener {
+        bindingIap.purchase.setOnClickListener {
             vm.onBuyingClicked()
         }
     }

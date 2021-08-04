@@ -1,11 +1,9 @@
 package com.hannesdorfmann.navigation
 
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.isOnBackstack
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.hannesdorfmann.navigation.utils.navigator
-import com.hannesdorfmann.navigation.utils.rootFlowCoordinator
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         if (fm.backStackEntryCount == 0)
             return false
 
-        val reverseOrder = fm.fragments.filter { it is OnBackPressed && it.isOnBackstack() }.reversed()
+        val reverseOrder = fm.fragments.filter { it is OnBackPressed && it.onBackPressed() }.reversed()
         for (f in reverseOrder) {
             val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
             if (handledByChildFragments) {

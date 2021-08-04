@@ -1,6 +1,7 @@
 package com.hannesdorfmann.navigation.view.iap
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
+
 
 class IapViewModel(
         private var close: (() -> Unit)?

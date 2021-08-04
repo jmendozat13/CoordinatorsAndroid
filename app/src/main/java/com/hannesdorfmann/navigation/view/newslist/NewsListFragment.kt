@@ -1,37 +1,43 @@
 package com.hannesdorfmann.navigation.view.newslist
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.navigation.R
+import com.hannesdorfmann.navigation.databinding.FragmentNewslistBinding
 import com.hannesdorfmann.navigation.domain.news.News
 import com.hannesdorfmann.navigation.utils.getViewModel
-import com.hannesdorfmann.navigation.utils.subscribe
-import kotlinx.android.synthetic.main.fragment_newslist.*
-import kotlinx.android.synthetic.main.item_news.view.*
 
 class NewsListFragment : Fragment() {
 
     private lateinit var adapter: NewsListAdapter
     private lateinit var vm: NewsListViewModel
+    private lateinit var bindingNewList: FragmentNewslistBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_newslist, null, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        bindingNewList = FragmentNewslistBinding.inflate(inflater, container, false)
+        return bindingNewList.root
+    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         vm = getViewModel()
+        with(bindingNewList) {
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            adapter = NewsListAdapter(layoutInflater, vm::itemSelected)
+            recyclerView.adapter = adapter
 
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = NewsListAdapter(layoutInflater, vm::itemSelected)
-        recyclerView.adapter = adapter
-
-        vm.items.subscribe(this) {
-            adapter.items = it
-            adapter.notifyDataSetChanged()
+            vm.items.observe(viewLifecycleOwner) {
+                adapter.items = it
+            }
         }
     }
 
@@ -56,16 +62,18 @@ class NewsListFragment : Fragment() {
 }
 
 
-class NewsListAdapter(val inflater: LayoutInflater, val click: (Int) -> Unit) : RecyclerView.Adapter<NewsListViewHolder>() {
+class NewsListAdapter(val inflater: LayoutInflater, val click: (Int) -> Unit) :
+    RecyclerView.Adapter<NewsListViewHolder>() {
 
     var items = emptyList<News>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsListViewHolder = NewsListViewHolder(inflater.inflate(R.layout.item_news, null, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsListViewHolder =
+        NewsListViewHolder(inflater.inflate(R.layout.item_news, null, false))
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: NewsListViewHolder, position: Int) {
-        holder.itemView.title.text = items[position].title
+        holder.itemView.findViewById<TextView>(R.id.title).text = items[position].title
         holder.itemView.setOnClickListener { click(items[position].id) }
     }
 }

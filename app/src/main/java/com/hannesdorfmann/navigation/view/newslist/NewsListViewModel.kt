@@ -1,7 +1,8 @@
 package com.hannesdorfmann.navigation.view.newslist
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.hannesdorfmann.navigation.domain.ab.AbTest
 import com.hannesdorfmann.navigation.domain.news.News
 import com.hannesdorfmann.navigation.domain.news.NewsRepository
@@ -17,10 +18,11 @@ class NewsListViewModel(
 
     private val disposable: Disposable
 
-    val items = MutableLiveData<List<News>>()
+    private val mItems = MutableLiveData<List<News>>()
+    val items: LiveData<List<News>> get() = mItems
 
     init {
-        disposable = newsRepository.getNewsArticles().subscribe { items.value = it }
+        disposable = newsRepository.getNewsArticles().subscribe { mItems.value = it }
     }
 
     fun itemSelected(itemId: Int) {

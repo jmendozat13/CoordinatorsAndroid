@@ -1,29 +1,32 @@
 package com.hannesdorfmann.navigation.view.onboarding.welcome
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.hannesdorfmann.navigation.R
+import androidx.fragment.app.Fragment
+import com.hannesdorfmann.navigation.databinding.FragmentWelcomeBinding
 import com.hannesdorfmann.navigation.utils.getViewModel
-import com.hannesdorfmann.navigation.utils.subscribe
-import kotlinx.android.synthetic.main.fragment_welcome.*
 
 class WelcomeFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_welcome, null, false)
+    private lateinit var bindingWelcome: FragmentWelcomeBinding
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
+        bindingWelcome = FragmentWelcomeBinding.inflate(inflater, container, false)
+        return bindingWelcome.root
+    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val vm: WelcomeViewModel = getViewModel()
-        vm.username.subscribe(this) {
-            name.text = "Hey $it"
-        }
-        next.setOnClickListener {
-            vm.onNextClicked()
+        with(bindingWelcome) {
+            vm.username.observe(viewLifecycleOwner) {
+                name.text = "Hey $it"
+            }
+            next.setOnClickListener {
+                vm.onNextClicked()
+            }
         }
     }
 }

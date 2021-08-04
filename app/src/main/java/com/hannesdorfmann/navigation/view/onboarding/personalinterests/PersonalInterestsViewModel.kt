@@ -1,7 +1,7 @@
 package com.hannesdorfmann.navigation.view.onboarding.personalinterests
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.hannesdorfmann.navigation.domain.news.Category
 import com.hannesdorfmann.navigation.domain.news.NewsRepository
 import com.hannesdorfmann.navigation.domain.user.Usermanager

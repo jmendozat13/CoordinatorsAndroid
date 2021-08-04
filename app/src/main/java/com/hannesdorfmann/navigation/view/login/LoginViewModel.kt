@@ -1,7 +1,8 @@
 package com.hannesdorfmann.navigation.view.login
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.hannesdorfmann.navigation.domain.user.LoginStateMachine
 import com.hannesdorfmann.navigation.utils.plus
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,7 +15,8 @@ class LoginViewModel(
         private var onForgotPasswordClicked: (() -> Unit)?
 ) : ViewModel() {
 
-    val state: MutableLiveData<LoginViewState> = MutableLiveData<LoginViewState>()
+    private val mState: MutableLiveData<LoginViewState> = MutableLiveData<LoginViewState>()
+    val state: LiveData<LoginViewState> get() = mState
 
     private val disposables = CompositeDisposable()
 
@@ -35,7 +37,7 @@ class LoginViewModel(
                 }
                 .startWith(LoginViewState.ShowLoginForm)
                 .subscribe {
-                    state.value = it
+                    mState.value = it
                 }
     }
 

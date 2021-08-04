@@ -1,16 +1,19 @@
 package com.hannesdorfmann.navigation.view.onboarding.personalinterests
 
 import android.graphics.drawable.ColorDrawable
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.navigation.R
 import com.hannesdorfmann.navigation.domain.news.Category
 
-class PersonalInteresstsAdapter(private val inflater: LayoutInflater, private val toggleSelection: (Category) -> Unit) : RecyclerView.Adapter<InteresstViewHolder>() {
+class PersonalInteresstsAdapter(
+    private val inflater: LayoutInflater,
+    private val toggleSelection: (Category) -> Unit
+) : RecyclerView.Adapter<InteresstViewHolder>() {
 
     var items: List<Category> = emptyList()
     var selected: Set<Category> = emptySet()
@@ -24,7 +27,12 @@ class PersonalInteresstsAdapter(private val inflater: LayoutInflater, private va
     override fun onBindViewHolder(holder: InteresstViewHolder, position: Int) {
         val category = items[position]
         holder.text.text = category.name
-        holder.itemView.background = if (selected.contains(category)) ColorDrawable(ContextCompat.getColor(holder.itemView.context, R.color.colorAccentOpacity)) else null
+        holder.itemView.background = if (selected.contains(category)) ColorDrawable(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.colorAccentOpacity
+            )
+        ) else null
         holder.itemView.setOnClickListener {
             toggleSelection(category)
         }
